@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Item</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      label,
+      input,
+      button {
+        display: block;
+        margin: 8px 0;
+      }
+      img {
+        max-height: 100px;
+        width: 100px;
+        object-fit: cover;
+        margin: 5px;
+        cursor: pointer;
+        transition: border 0.3s ease;
+      }
+      .image-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .image-wrapper {
+        position: relative;
+        margin: 5px;
+      }
+      .image-wrapper button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: red;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      .selected-image {
+        border: 5px solid #007bff; /* Bold blue border for selected image */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="successMessage" style="display: none; color: green; font-weight: bold"></div>
+    <div id="errorMessage" style="display: none; color: red; font-weight: bold"></div>
+
+    <h2>Add New Item</h2>
+    <form id="itemForm">
+      <label for="prompt">Prompt</label>
+      <input type="text" id="prompt" placeholder="Enter prompt" required />
+
+      <input type="file" id="image" accept="image/*" />
+
+      <button type="button" id="fetchImageBtn">Fetch Images from Page</button>
+
+      <button type="submit" id="submitBtn">Add Prompt</button>
+      <div class="image-container" id="imageContainer"></div>
+    </form>
+
+    <script src="config.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Add Prompt and Image",
+  "description": "Add a prompt and image to the database",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "<all_urls>" // If you need more specific permissions, you can limit this
+  ]
+}
