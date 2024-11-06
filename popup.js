@@ -23,28 +23,66 @@ function setFileToBase(file) {
   };
 }
 
-// Fetch all images from the current page
+// Fetch all images and prompt from the current page
+// async function fetchImagesFromPage() {
+//   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+//     chrome.scripting.executeScript(
+//       {
+//         target: { tabId: tabs[0].id },
+//         function: getContentFromPage,
+//       },
+//       (results) => {
+//         if (results && results[0].result) {
+//           const { imageUrls, promptText } = results[0].result;
+//
+//           if (promptText) {
+//             document.getElementById('prompt').value = promptText; // Set the prompt text
+//           } else {
+//             document.getElementById('prompt').value = ''; // Leave blank if no prompt found
+//           }
+//
+//           if (imageUrls.length > 0) {
+//             displayFetchedImages(imageUrls); // Display fetched images
+//           }
+//         }
+//       },
+//     );
+//   });
+// }
+
 async function fetchImagesFromPage() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.scripting.executeScript(
-      {
-        target: { tabId: tabs[0].id },
-        function: getImagesFromPage,
-      },
-      (results) => {
-        if (results && results[0].result) {
-          const imageUrls = results[0].result;
-          displayFetchedImages(imageUrls);
+    const tabId = tabs[0].id;
+
+    chrome.runtime.sendMessage({ type: 'FETCH_IMAGES_AND_PROMPT', tabId }, (response) => {
+      if (response) {
+        const { imageUrls, promptText } = response;
+
+        if (promptText) {
+          document.getElementById('prompt').value = promptText; // Set the prompt text
+        } else {
+          document.getElementById('prompt').value = ''; // Leave blank if no prompt found
         }
-      },
-    );
+
+        if (imageUrls.length > 0) {
+          displayFetchedImages(imageUrls); // Display fetched images
+        }
+      }
+    });
   });
 }
 
 // Content script to extract all images from the page (runs in the page context)
-function getImagesFromPage() {
-  const images = Array.from(document.querySelectorAll('img'));
-  return images.map((img) => img.src);
+function getContentFromPage() {
+  const images = Array.from(document.querySelectorAll('img')).map((img) => img.src);
+
+  let promptDiv = document.querySelector('h2.prompt');
+  if (!promptDiv) {
+    promptDiv = document.querySelector('div.prompt');
+  }
+  // const promptDiv = document.querySelector('.mantine-Text-root.text-sm.mantine-1c2skr8');
+  const promptText = promptDiv ? promptDiv.textContent : '';
+  return { imageUrls: images, promptText };
 }
 
 // Display the fetched images in the popup and allow user to delete

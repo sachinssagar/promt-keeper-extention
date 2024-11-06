@@ -6,6 +6,9 @@
   "action": {
     "default_popup": "popup.html"
   },
+  "background": {
+    "service_worker": "background.js" // Add background script
+  },
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": [
     "<all_urls>" // If you need more specific permissions, you can limit this
