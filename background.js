@@ -21,11 +21,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 function getContentFromPage() {
   const images = Array.from(document.querySelectorAll('img')).map((img) => img.src);
 
-  let promptDiv = document.querySelector('h2.prompt');
-  if (!promptDiv) {
-    promptDiv = document.querySelector('div.prompt');
+  let promptDiv1 = document.querySelector('.mantine-Text-root.text-sm.mantine-14lhcb9');
+  let promptDiv2 = document.querySelector('.mantine-Text-root.text-sm.mantine-1c2skr8');
+
+  // Fallbacks for each prompt div if not found
+  if (!promptDiv1) {
+    promptDiv1 = document.querySelector('h2.prompt') || document.querySelector('div.prompt');
   }
-  // const promptDiv = document.querySelector('.mantine-Text-root.text-sm.mantine-1c2skr8');
-  const promptText = promptDiv ? promptDiv.textContent : ''; // Extract text from the div if it exists
+  if (!promptDiv2) {
+    promptDiv2 = document.querySelector('h2.prompt') || document.querySelector('div.prompt');
+  }
+
+  // Extract text from the prompt divs if they exist
+  const promptText1 = promptDiv1 ? promptDiv1.textContent : '';
+  const promptText2 = promptDiv2 ? promptDiv2.textContent : '';
+
+  // Combine the prompt texts
+  const promptText = `${promptText1} ${promptText2}`.trim();
+
+  // Return image URLs and combined prompt text as an object
   return { imageUrls: images, promptText };
 }
