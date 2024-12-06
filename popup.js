@@ -30,6 +30,7 @@ function setFileToBase(file) {
 async function fetchImagesFromPage() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const tabId = tabs[0].id;
+    const tabUrl = tabs[0].url;
 
     chrome.runtime.sendMessage({ type: "FETCH_IMAGES_AND_PROMPT", tabId }, (response) => {
       if (response) {
@@ -45,6 +46,9 @@ async function fetchImagesFromPage() {
           displayFetchedImages(imageUrls);
           selectFirstImage(imageUrls[0]);
         }
+
+        // Save the current tab URL
+        document.getElementById("pageUrl").value = tabUrl;
       }
     });
   });
@@ -151,6 +155,7 @@ async function handleSubmit(e) {
   e.preventDefault();
 
   const prompt = document.getElementById("prompt").value;
+  const pageUrl = document.getElementById("pageUrl").value;
   const submitBtn = document.getElementById("submitBtn");
   const successMessageDiv = document.getElementById("successMessage");
   const errorMessageDiv = document.getElementById("errorMessage");
@@ -162,7 +167,7 @@ async function handleSubmit(e) {
   errorMessageDiv.style.display = "none";
 
   if (prompt && imageBase64) {
-    const item = { promt: prompt, image: imageBase64 };
+    const item = { promt: prompt, image: imageBase64, url: pageUrl };
 
     try {
       const response = await fetch(`${config.API_BASE_URL}/promts`, {
@@ -179,6 +184,7 @@ async function handleSubmit(e) {
 
         document.getElementById("prompt").value = "";
         document.getElementById("image").value = "";
+        document.getElementById("pageUrl").value = "";
         imageBase64 = "";
         selectedImageBase64 = "";
         document.getElementById("imageContainer").innerHTML = "";

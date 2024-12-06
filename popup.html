@@ -5,12 +5,20 @@
     <style>
       body {
         font-family: Arial, sans-serif;
+        width: 260px; /* Adjusted width */
+        max-width: 260px;
+        overflow-x: hidden;
       }
       label,
       input,
       button {
         display: block;
         margin: 8px 0;
+      }
+      #prompt,
+      #pageUrl {
+        width: 240px; /* Match the popup width closely */
+        box-sizing: border-box;
       }
       img {
         max-height: 100px;
@@ -37,8 +45,33 @@
         border: none;
         cursor: pointer;
       }
+
+      /* Style for buttons in the same row */
+      #buttonsContainer {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+      }
+
+      #fetchImageBtn,
+      #submitBtn {
+        background-color: #4caf50; /* Green background */
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 10px 20px;
+        height: 50px; /* Increased height */
+        flex: 1; /* Allow both buttons to grow evenly */
+        text-align: center;
+      }
+
+      #fetchImageBtn:hover,
+      #submitBtn:hover {
+        background-color: #45a049;
+      }
+
       .selected-image {
-        border: 5px solid #007bff; /* Bold blue border for selected image */
+        border: 5px solid #ff0000;
       }
     </style>
   </head>
@@ -50,12 +83,16 @@
     <form id="itemForm">
       <label for="prompt">Prompt</label>
       <input type="text" id="prompt" placeholder="Enter prompt" required />
+      <label for="pageUrl">Page URL</label>
+      <input type="text" id="pageUrl" placeholder="Enter page URL" />
 
-      <input type="file" id="image" accept="image/*" />
+      <input type="hidden" id="image" accept="image/*" />
 
-      <button type="button" id="fetchImageBtn">Fetch Images from Page</button>
+      <div id="buttonsContainer">
+        <button type="button" id="fetchImageBtn">Fetch</button>
+        <button type="submit" id="submitBtn">Add</button>
+      </div>
 
-      <button type="submit" id="submitBtn">Add Prompt</button>
       <div class="image-container" id="imageContainer"></div>
     </form>
 
